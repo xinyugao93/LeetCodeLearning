@@ -3,41 +3,38 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+namespace q5 {
 
-class Solution {
+class Solution5 {
 public:
-    string longestPalindrome(string s) {
-        auto size = s.size();
-        std::vector<std::vector<bool>> dp(size, std::vector<bool>(size, false));
-        for(int i = 0; i < size; ++i) {
-            dp[i][i] = true;
-        }
+    std::string longestPalindrome(const std::string& s) {
+        if(s.empty()) return "";
+        int start = 0;
+        int end = 0;
 
-        int maxLen = 1;
-        int begin = 0;
-        for(int len = 2; len <= size; ++len) {
-            for(int left = 0; left < size; ++left) {
-                int right = left + len - 1;
-                if(right >= size) {
-                    break;
-                }
+        auto expand = [&](int left, int right){
+            while(left >= 0 && right < static_cast<int>(s.size()) && s[left] == s[right]) {
+                --left;
+                ++right;
+            }
+            return std::pair<int,int>{left + 1, right - 1};
+        };
 
-                if(s[left] != s[right]) {
-                    dp[left][right] = false;
-                } else if(len < 3) {
-                    dp[left][right] = true;
-                } else {
-                    dp[left][right] = dp[left + 1][right - 1];
-                }
-
-                if(dp[left][right] && len > maxLen) {
-                    maxLen = len;
-                    begin = left;
-                }
+        for(int i = 0; i < static_cast<int>(s.size()); ++i) {
+            auto [l1, r1] = expand(i, i);
+            if(r1 - l1 > end - start) {
+                start = l1;
+                end = r1;
+            }
+            auto [l2, r2] = expand(i, i + 1);
+            if(r2 - l2 > end - start) {
+                start = l2;
+                end = r2;
             }
         }
 
-        return s.substr(begin, maxLen);
+        return s.substr(start, end - start + 1);
     }
 };
+
+} // namespace q5

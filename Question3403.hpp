@@ -3,31 +3,33 @@
 #include <string>
 #include <cstdint>
 
-using namespace std;
+namespace q3403 {
 
-class Solution {
+class Solution3403 {
 public:
-    string answerString(string word, int numFriends) {
-        if(1 == numFriends) {
+    std::string answerString(const std::string& word, int numFriends) {
+        if(numFriends <= 1) {
             return word;
         }
 
-        auto size = word.size();
-        uint32_t left = 0;
-        string ret = "";
-        for(auto right = size - numFriends; right < size; ++right, ++left) {
-            string tmp = word.substr(left, size - numFriends + 1);
-            if(ret < tmp) {
-                ret = tmp;
+        const std::size_t keep = word.size() - numFriends + 1;
+        std::size_t drop = word.size() - keep;
+        std::string result;
+        result.reserve(word.size());
+
+        for(char c : word) {
+            while(!result.empty() && result.back() < c && drop > 0) {
+                result.pop_back();
+                --drop;
             }
-        }
-        for(; left < size; ++left) {
-            string tmp = word.substr(left, size - left);
-            if(ret < tmp) {
-                ret = tmp;
-            }
+            result.push_back(c);
         }
 
-        return ret;
+        if(result.size() > keep) {
+            result.resize(keep);
+        }
+        return result;
     }
 };
+
+} // namespace q3403

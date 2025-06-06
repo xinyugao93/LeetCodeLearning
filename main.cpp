@@ -1,10 +1,17 @@
 #include "Question1061.hpp"
+#include "Question5.hpp"
+#include "Question3403.hpp"
+
 #include <iostream>
-#include <algorithm>
-#include <vector>
 
 int main() {
-    std::vector<int> s1{1, 2, 5, 4, 6, 10};
-    auto it = std::max_element(s1.begin(), s1.end());
-    std::cout << *it << std::endl;  
+    q1061::Solution1061 sol1;
+    std::cout << sol1.smallestEquivalentString("parker", "morris", "parser") << '\n';
+
+    q5::Solution5 sol2;
+    std::cout << sol2.longestPalindrome("babad") << '\n';
+
+    q3403::Solution3403 sol3;
+    std::cout << sol3.answerString("leetcode", 3) << '\n';
+    return 0;
 }

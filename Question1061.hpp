@@ -5,30 +5,33 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+namespace q1061 {
 
 
-class Solution {
+class Solution1061 {
 public:
-    string smallestEquivalentString(string s1, string s2, string baseStr) {
+    std::string smallestEquivalentString(std::string s1, std::string s2, std::string baseStr) {
         UnionFind uf(26);
-        for(int i = 0; i < s1.size(); ++i) {
+        for(std::size_t i = 0; i < s1.size(); ++i) {
             uf.unite(s1[i] - 'a', s2[i] - 'a');
         }
 
-        for(int i = 0; i < baseStr.size(); ++i) {
-            baseStr[i] = uf.find(baseStr[i] - 'a') + 'a';
+        for(std::size_t i = 0; i < baseStr.size(); ++i) {
+            baseStr[i] = static_cast<char>(uf.findMin(baseStr[i] - 'a') + 'a');
         }
         return baseStr;
     }
 
 private:
-    class UnionFind{
+    class UnionFind {
     public:
-        UnionFind(int n) {
+        explicit UnionFind(int n) {
             parent.resize(n);
+            rank.resize(n, 0);
+            minVal.resize(n);
             for(int i = 0; i < n; ++i) {
                 parent[i] = i;
+                minVal[i] = i;
             }
         }
 
@@ -39,6 +42,11 @@ private:
             return parent[x];
         }
 
+        int findMin(int x) {
+            int root = find(x);
+            return minVal[root];
+        }
+
         void unite(int x, int y) {
             int rootX = find(x);
             int rootY = find(y);
@@ -46,13 +54,24 @@ private:
                 return;
             }
 
-            if(rootX > rootY) {
+            if(rank[rootX] < rank[rootY]) {
                 parent[rootX] = rootY;
+                minVal[rootY] = std::min(minVal[rootX], minVal[rootY]);
+            } else if(rank[rootX] > rank[rootY]) {
+                parent[rootY] = rootX;
+                minVal[rootX] = std::min(minVal[rootX], minVal[rootY]);
             } else {
                 parent[rootY] = rootX;
+                ++rank[rootX];
+                minVal[rootX] = std::min(minVal[rootX], minVal[rootY]);
             }
         }
+
     private:
         std::vector<int> parent;
+        std::vector<int> rank;
+        std::vector<int> minVal;
     };
 };
+
+} // namespace q1061
