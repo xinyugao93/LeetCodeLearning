@@ -3,6 +3,9 @@
 #include <string>
 #include <vector>
 
+/**
+ * 给你一个字符串 s，找到 s 中最长的 回文 子串。
+ */
 namespace q5 {
 
 class Solution5 {
